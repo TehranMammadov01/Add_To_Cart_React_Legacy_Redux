@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -8,13 +8,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Table from 'react-bootstrap/Table';
 import { NavLink } from 'react-router-dom';
 import cartGift from '../assets/cart.gif';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { DLT } from '../redux/actions';
 
 const Header = () => {
-    const getData = useSelector(state => state.cartreducer.carts);
-    console.log(getData); 
+    const getData = useSelector(state => state.cartreducer.carts); 
+    const [totalPrice, setTotalPrice] = useState(0);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const dispatch = useDispatch()
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -23,6 +25,22 @@ const Header = () => {
     const handleClose = () => {
         setAnchorEl(null);
     }
+
+    const deleteProduct = (id) => {
+        dispatch(DLT(id))
+    }
+
+    const total = () => {
+        let price = 0;
+        getData.map(ele => {
+            price = ele.price * ele.qnty + price;
+        })
+        setTotalPrice(price);
+    }
+
+    useEffect(() => {
+        total();
+    }, [total])
 
     return (
         <Navbar bg="dark" variant="dark" className="navbar-container">
@@ -72,18 +90,18 @@ const Header = () => {
                                                 <p>{eachItem.rname}</p>
                                                 <p>Price: ${eachItem.price}</p>
                                                 <p>Quantity: {eachItem.qnty}</p>
-                                                <p style={{color: "red", fontSize: 20, cursor: "pointer"}}>
+                                                <p style={{color: "red", fontSize: 20, cursor: "pointer"}} onClick={() => deleteProduct(eachItem.id)}>
                                                     <i className='fas fa-trash smalltrash'></i>
                                                 </p>
                                             </td> 
-                                            <td className="mt-5" style={{color: "red", fontSize: 20, cursor: "pointer"}}>
-                                                <i className='fas fa-trash'></i>
+                                            <td className="mt-5" style={{color: "red", fontSize: 20, cursor: "pointer"}} onClick={() => deleteProduct(eachItem.id)}>
+                                                <i className='fas fa-trash largetrash'></i>
                                             </td>
                                         </tr>
                                     </>
                                 )
                             })}
-                            <p className="text-center">Total: $300</p>
+                            <p className="text-center">Total: ${totalPrice}</p>
                         </tbody>
                     </Table>
                 </div> 
