@@ -5,4 +5,4 @@ const rootred = combineReducers({
     cartreducer
 });
 
-export default rootred;
+export default rootred; 

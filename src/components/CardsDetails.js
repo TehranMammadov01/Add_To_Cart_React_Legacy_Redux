@@ -28,7 +28,7 @@ const CardsDetails = () => {
     }
 
     const remove = (item) => {
-        dispatch(REMOVE(item))
+        dispatch(REMOVE(item));
     }
 
     useEffect(() => {

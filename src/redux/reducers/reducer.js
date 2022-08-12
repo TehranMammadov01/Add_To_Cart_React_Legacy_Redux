@@ -25,7 +25,6 @@ export const cartreducer = (state = INIT_STATE, action) => {
             const IteamIndexDecrement = state.carts.findIndex(iteam => iteam.id === action.payload.id);
             if (state.carts[IteamIndexDecrement].qnty >= 1) {
                 const deleteItem = state.carts[IteamIndexDecrement].qnty -= 1;
-                console.log([...state.carts, deleteItem]);
                 return {
                     ...state,
                     carts: [...state.carts]
